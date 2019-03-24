@@ -60,66 +60,19 @@ def lista_sin_repetir(lista_primaria):
             lista.append(lista_primaria[i])
     return lista
 
-##función que crea extra los directores
-#def directores(doc):
-#    lista=[]
-#    for i in doc:
-#        director=i["director"]["name"]
-#        lista.append(director)
-#    return lista  
-#
-##función que devuelve la lista de los direcores sin repetir
-#def directores_sin_repetir(doc):
-#    todos_dir=directores(doc)
-#    filtro_dir=lista_sin_repetir(todos_dir)
-#    return filtro_dir
-#
-##función para elegir peliculas segun director
-#def dir_peli(doc,registro, registro2, numero):
-#    lista=[]
-#    direlegido=directores_sin_repetir(doc)[numero]
-#    datosdir=datos(doc,registro)
-#    datodirele=eleccion(datosdir,registro2,direlegido)
-#    pelicula=eleccion(doc,registro,datodirele[0])
-#    return pelicula
-#
-##función para elegir peliculas segun director
-#def act_peli(doc,registro, numero):
-#    lista=[]
-#    actor=actores_sin_repetir(doc)[numero]
-#    listapeliculas=lista_peliculas_actor(doc,actor)
-#    return listapeliculas
-#
-#def lista_peliculas_actor(doc,actor):
-#    lista=[]
-#    for i in doc:
-#        name=i["name"]
-#        for x in i["actors"]:
-#            if x==actor:
-#                lista.append(name)
-#    return lista
-#
-#
-##función que recibe un registro y devuleve las películas 
-##donde aparecen
-#def eleccion(doc,registro,dato):
-#    lista=[]
-#    for i in doc:
-#        #print(i[registro])
-#        if i[registro]==dato:
-#            lista.append(i)
-#    return lista
-#
-##función que devuelve los actores
-#def actores_sin_repetir(doc):
-#    listactores=datos(doc,"actors")
-#    lista=[]
-#    for i in listactores:
-#        for x in i:
-#            lista.append(x)
-#    actores=lista_sin_repetir(lista)
-#    return actores
-#
+#función para el ejercicio 5
+def ejercicio5(doc, año1, año2, puntuación):
+    lista_nombre=[]
+    lista_poster=[]
+    for i in range(len(doc)):
+        if int(doc[i]["year"])>=año1 and int(doc[i]["year"])<=año2:
+            media=sum(doc[i]["ratings"])/len(doc[i]["ratings"])
+            if puntuación==media:
+                lista_nombre.append(doc[i]["title"])
+                lista_poster.append(doc[i]["posterurl"])
+    return zip(lista_nombre, lista_poster)
+
+
 #menu principal
 while True:
     print('''
@@ -134,7 +87,9 @@ while True:
     if opcion=="1":
         for i in range(len(datos(doc,"title"))):
             print(i, "-", datos(doc,"title")[i])
-        print("")
+            print("     AÑO:", datos(doc, "year")[i])
+            print("     DURACIÓN:", datos(doc, "duration")[i])
+            print("")
         tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
 
     elif opcion=="2":
@@ -167,18 +122,22 @@ while True:
         tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
 
     elif opcion=="5":
-        
-#        for i in range(len(datos(doc,"name"))):
-#            print(i, "-", datos(doc,"name")[i])
-#        print("")
-#        pel=convalidar("a la película: ", len(datos(doc,"name")))
-#        nombrepeli=datos(doc,"name")[pel]
-#        nombrelink=nombrepeli.replace(" ","+")
-#        link="https://www.imdb.com/find?ref_=nv_sr_fn&q="+nombrelink
-#        webbrowser.open(link,1,True)
-#        print("")
-#        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")  
-#
+        año1=int(input("Introduce el primer año: "))
+        año2=int(input("Introduce el segundo año: "))
+        while año2<año1:
+            print("ERROR. El segundo año debe ser mayor que el primero")
+            año1=int(input("Introduce el primer año: "))
+            año2=int(input("Introduce el segundo año: "))
+        puntuacion=float(input("Introduce la nota media: "))
+        while puntuacion>10:
+            print("ERROR. Debe ser una puntuación sobre 10")
+            puntuacion=float(input("Introduce la nota media: "))
+        for nombre, poster in ejercicio5(doc, año1, año2, puntuacion):
+            print(" -   NOMBRE: ",nombre)
+            print(" -   URL     ", poster)
+            print("")
+        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")  
+
     elif opcion=="0":
         print("Adios")
         break
