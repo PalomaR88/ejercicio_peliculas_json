@@ -10,29 +10,56 @@ def datos(doc,datos):
     for i in doc:
         lista.append(i[datos])
     return lista
-#
-##funcion que convalida, introduce el máx y devuelve una nueva opcion
-#def convalidar(dato, num_max):
-#    while True:
-#        numero=int(input("Introduce el número que corresponde %s" %(dato)))
-#        if numero>num_max:
-#            print("ERROR. El número debe ser entre 0  y", num_max)
-#        else:
-#            break
-#    return numero
-#
-##función que recibe una lista y te la devuelve sin repetir
-#def lista_sin_repetir(lista_primaria):  
-#    lista=[]
-#    for i in range(len(lista_primaria)):
-#        existe=False
-#        for x in range(len(lista)):
-#            if lista_primaria[i]==lista[x]:
-#                existe=True
-#        if existe==False:
-#            lista.append(lista_primaria[i])
-#    return lista
-#
+
+#función para el ejercicio 3
+def ejercicio3(doc, palabra1, palabra2):
+    lista=[]
+    for i in range(len(datos(doc, "storyline"))):
+        if palabra1 in datos(doc, "storyline")[i]:
+            if palabra2 in datos(doc, "storyline")[i]:
+                lista.append(datos(doc, "title")[i])
+    return lista
+
+#función que crea la lista de los actores sin repetir
+def lista_actores(dos):
+    lista=[]
+    for i in datos(doc, "actors"):
+        for x in i:
+            lista.append(x)
+    actores_sin_repetir=lista_sin_repetir(lista)
+    return actores_sin_repetir
+
+#función para el ejercicio 4
+def ejercicio4(doc, numero):
+    lista=[]
+    actor=lista_actores(doc)[numero]
+    for i in range(len(doc)):
+        if actor in doc[i]["actors"]:
+            lista.append(doc[i]["title"])
+    return lista
+
+#funcion que convalida, introduce el máx y devuelve una nueva opcion
+def convalidar(dato, num_max):
+    while True:
+        numero=int(input("Introduce el número que corresponde %s" %(dato)))
+        if numero>num_max:
+            print("ERROR. El número debe ser entre 0  y", num_max)
+        else:
+            break
+    return numero
+
+#función que recibe una lista y te la devuelve sin repetir
+def lista_sin_repetir(lista_primaria):  
+    lista=[]
+    for i in range(len(lista_primaria)):
+        existe=False
+        for x in range(len(lista)):
+            if lista_primaria[i]==lista[x]:
+                existe=True
+        if existe==False:
+            lista.append(lista_primaria[i])
+    return lista
+
 ##función que crea extra los directores
 #def directores(doc):
 #    lista=[]
@@ -110,59 +137,37 @@ while True:
         print("")
         tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
 
-#    elif opcion=="2":
-#        print("Elige una opción:")
-#        print(" 0 - Director")
-#        print(" 1 - Actor")
-#        opcion=convalidar("a la opción: ", 1)
-#        if opcion==0:
-#            for i in range(len(directores_sin_repetir(doc))):
-#                print(i, "-", directores_sin_repetir(doc)[i])
-#            dir=convalidar("al director: ", len(directores_sin_repetir(doc)))
-#            pelicula=datos(dir_peli(doc,"director","name",dir),"name")
-#            print("Películas de",directores_sin_repetir(doc)[dir])
-#            for i in pelicula:
-#                print("")
-#                print(" -",i)
-#        else:
-#            for i in range(len(actores_sin_repetir(doc))):
-#                print(i, "-", actores_sin_repetir(doc)[i])
-#            act=convalidar("al actor: ", len(actores_sin_repetir(doc)))
-#            print("Peliculas de", actores_sin_repetir(doc)[act])
-#            peliculas=act_peli(doc,"actors",act)
-#            for i in peliculas:
-#                print("")
-#                print(" -",i)
-#        print(" ")
-#        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
-#
-#    elif opcion=="3":
-#        for i in range(len(datos(doc,"name"))):
-#            print(i, "-", datos(doc,"name")[i])
-#        print("")
-#        pel=convalidar("a la película: ", len(datos(doc,"name")))
-#        anio=eleccion(doc,"name",datos(doc,"name")[pel])[0]["year"]
-#        print(datos(doc,"name")[pel],"es de",anio)
-#        print(" ")
-#        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
-#
-#
-#    elif opcion=="4":
-#        anio=int(input("Introduce el año: "))
-#        #print(eleccion(doc,"year",anio))
-#        listapeliculas=eleccion(doc,"year",anio)
-#    
-#        if len(listapeliculas)==0:
-#            print("No se tienen datos de películas en el año",anio)
-#        else:
-#            for i in listapeliculas:
-#                print("")
-#                print(" -",i["name"])
-#        print("")
-#        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
-#
-#
-#    elif opcion=="5":
+    elif opcion=="2":
+        for i in range(len(datos(doc, "title"))):
+            print("-", datos(doc,"title")[i])
+            print("         Actores/actrices: ",len(datos(doc, "actors")[i]))
+        print(" ")
+        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
+
+    elif opcion=="3":
+        palabra1=input("Introduce la primera palabra: ")
+        palabra2=input("Introduce la segunda palabra: ")
+        if len(ejercicio3(doc, palabra1, palabra2))==0:
+            print("No hay coincidencias")
+        else:
+            print("Películas con las palabras", palabra1,"y", palabra2)
+            for i in range(len(ejercicio3(doc, palabra1, palabra2))):
+                print("     - ", ejercicio3(doc, palabra1, palabra2)[i])
+        print(" ")
+        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
+
+    elif opcion=="4":
+        for i in range(len(lista_actores(doc))):
+            print(i, "-", lista_actores(doc)[i]) 
+        numero=convalidar("al actor o actriz: ", len(lista_actores(doc)))
+        print("Las películas donde aparece", lista_actores(doc)[numero], "son:")
+        for i in ejercicio4(doc,numero):
+            print("    -", i)
+        print("")
+        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")
+
+    elif opcion=="5":
+        
 #        for i in range(len(datos(doc,"name"))):
 #            print(i, "-", datos(doc,"name")[i])
 #        print("")
@@ -174,12 +179,11 @@ while True:
 #        print("")
 #        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")  
 #
-#    elif opcion=="0":
-#        print("Adios")
-#        break
-#    else:
-#        print("Lo siento, no hay ninguna opción disponible")
-#        print(" ")
-#
-#
-#
+    elif opcion=="0":
+        print("Adios")
+        break
+    else:
+        print("Lo siento, no hay ninguna opción disponible")
+        print(" ")
+
+
