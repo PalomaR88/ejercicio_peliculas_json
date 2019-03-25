@@ -4,7 +4,7 @@ import webbrowser
 with open("movies.json") as fichero:
     doc=json.load(fichero)
 
-#función que devuelve todos los datos de directores
+#función que devuelve los datos de una parte del diccionario
 def datos(doc,datos):
     lista=[]
     for i in doc:
@@ -61,16 +61,25 @@ def lista_sin_repetir(lista_primaria):
     return lista
 
 #función para el ejercicio 5
-def ejercicio5(doc, año1, año2, puntuación):
-    lista_nombre=[]
-    lista_poster=[]
+def ejercicio5(doc, año1, año2):
+    lista_media=[]
+    lista=[]
+    lista_final=[]
     for i in range(len(doc)):
         if int(doc[i]["year"])>=año1 and int(doc[i]["year"])<=año2:
             media=sum(doc[i]["ratings"])/len(doc[i]["ratings"])
-            if puntuación==media:
-                lista_nombre.append(doc[i]["title"])
-                lista_poster.append(doc[i]["posterurl"])
-    return zip(lista_nombre, lista_poster)
+            lista_media.append(media)
+            lista.append(doc[i])
+    lista_media.sort()
+    lista_media.reverse()
+    #l2=l1.reverse()
+    lista_media1=lista_sin_repetir(lista_media)
+    for i in lista_media1:
+        for x in lista:
+            media1=sum(x["ratings"])/len(x["ratings"])
+            if media==media1:
+                lista_final.append(x)
+    return lista_final
 
 
 #menu principal
@@ -128,15 +137,12 @@ while True:
             print("ERROR. El segundo año debe ser mayor que el primero")
             año1=int(input("Introduce el primer año: "))
             año2=int(input("Introduce el segundo año: "))
-        puntuacion=float(input("Introduce la nota media: "))
-        while puntuacion>10:
-            print("ERROR. Debe ser una puntuación sobre 10")
-            puntuacion=float(input("Introduce la nota media: "))
-        for nombre, poster in ejercicio5(doc, año1, año2, puntuacion):
-            print(" -   NOMBRE: ",nombre)
-            print(" -   URL     ", poster)
+        datos=ejercicio5(doc, año1, año2)
+        for i in range(3):
+            print("     - NOMBRE:",datos[i]["title"])
+            print("     - URL:", datos[i]["posterurl"])
+            print("     - NOTA MEDIA:", sum(datos[i]["ratings"])/len(datos[i]["ratings"]))
             print("")
-        tecla= input("PRESIONA UNA INTRO PARA CONTINUAR")  
 
     elif opcion=="0":
         print("Adios")
