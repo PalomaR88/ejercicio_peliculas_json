@@ -65,11 +65,11 @@ def ejercicio5(doc, año1, año2):
     lista_media=[]
     lista=[]
     lista_final=[]
-    for i in range(len(doc)):
-        if int(doc[i]["year"])>=año1 and int(doc[i]["year"])<=año2:
-            media=sum(doc[i]["ratings"])/len(doc[i]["ratings"])
+    for i in doc:
+        if int(i["year"])>=año1 and int(i["year"])<=año2:
+            media=sum(i["ratings"])/len(i["ratings"])
             lista_media.append(media)
-            lista.append(doc[i])
+            lista.append(i)
     lista_media.sort()
     lista_media.reverse()
     #l2=l1.reverse()
@@ -77,7 +77,7 @@ def ejercicio5(doc, año1, año2):
     for i in lista_media1:
         for x in lista:
             media1=sum(x["ratings"])/len(x["ratings"])
-            if media==media1:
+            if i==media1:
                 lista_final.append(x)
     return lista_final
 
@@ -138,6 +138,7 @@ while True:
             año1=int(input("Introduce el primer año: "))
             año2=int(input("Introduce el segundo año: "))
         datos=ejercicio5(doc, año1, año2)
+        #print(datos)
         for i in range(3):
             print("     - NOMBRE:",datos[i]["title"])
             print("     - URL:", datos[i]["posterurl"])
